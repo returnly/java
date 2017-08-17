@@ -1,2 +1,2 @@
-github-triggers.yml
-.fp-git-blocks
+.idea/
+*.iml

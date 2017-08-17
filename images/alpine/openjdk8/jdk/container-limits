@@ -37,8 +37,7 @@ core_limit() {
 }
 
 max_memory() {
-  # High number which is the max limit unti which memory is supposed to be
-  # unbounded. 
+  # High number which is the max limit until which memory is supposed to be unbounded.
   local max_mem_unbounded="$(cat /sys/fs/cgroup/memory/memory.memsw.limit_in_bytes)"
   local mem_file="/sys/fs/cgroup/memory/memory.limit_in_bytes"
   if [ -r "${mem_file}" ]; then
@@ -49,6 +48,19 @@ max_memory() {
   fi
 }
 
+reserved_memory() {
+  # Soft limit aka reserved for container
+  local mem_file="/sys/fs/cgroup/memory/memory.soft_limit_in_bytes"
+  local max_mem=`max_memory`
+  if [ -r "${mem_file}" -a -n "$max_mem" ]; then
+    local res_mem="$(cat ${mem_file})"
+    if [ ${res_mem} -le ${max_mem} ]; then
+      echo "${res_mem}"
+    fi
+  fi
+}
+
+
 limit="$(core_limit)"
 if [ x$limit != x ]; then
    export CONTAINER_CORE_LIMIT="${limit}"
@@ -58,5 +70,11 @@ unset limit
 limit="$(max_memory)"
 if [ x$limit != x ]; then
   export CONTAINER_MAX_MEMORY="$limit"
+fi
+unset limit
+
+limit="$(reserved_memory)"
+if [ x$limit != x ]; then
+  export CONTAINER_RESERVED_MEMORY="$limit"
 fi
 unset limit

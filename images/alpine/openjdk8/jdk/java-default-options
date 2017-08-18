@@ -93,10 +93,16 @@ diagnostics() {
 # RMI-based JMX -- stock impl.
 default_jmx() {
   if [ "x$ADMIN_PORT" != "x" ]; then
+    local host
+    if [ -z "$AWS" ] ; then
+      host="0.0.0.0"
+    else
+      host=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`
+    fi
     echo "-Dcom.sun.management.jmxremote.port=$ADMIN_PORT
           -Dcom.sun.management.jmxremote.authenticate=false
           -Dcom.sun.management.jmxremote.ssl=false
-          -Djava.rmi.server.hostname=0.0.0.0
+          -Djava.rmi.server.hostname=$host
           -Dcom.sun.management.jmxremote.rmi.port=$ADMIN_PORT"
   fi
 }

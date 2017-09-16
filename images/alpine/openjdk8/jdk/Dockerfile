@@ -18,6 +18,7 @@ RUN apk add --update \
     curl \
     openjdk8 \
     bind-tools \
+    aws-cli \
  && rm /var/cache/apk/* \
  && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security
 

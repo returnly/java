@@ -14,11 +14,14 @@ ENV AB_OFF true
 
 
 # /dev/urandom is used as random source, which is prefectly safe according to http://www.2uo.de/myths-about-urandom/
-RUN apk add --update \
-    curl \
-    openjdk8 \
-    bind-tools \
-    aws-cli \
+RUN apk --no-cache update \
+ && apk --no-cache add --update \
+            curl \
+            openjdk8 \
+            bind-tools \
+            groff less python py-pip ca-certificates \
+ && pip --no-cache-dir install awscli \
+ && apk --purge -v del py-pip \
  && rm /var/cache/apk/* \
  && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security
 

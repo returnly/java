@@ -40,4 +40,7 @@ EXPOSE 8080 8778 9779
 COPY run-java.sh debug-options container-limits java-default-options /deployments/
 RUN chmod 755 /deployments/run-java.sh /deployments/java-default-options /deployments/container-limits /deployments/debug-options
 
-CMD [ "/deployments/run-java.sh" ]
+# Grab SSM resolver shell script used as the launcher
+RUN aws s3 cp s3://returnly-cfn-templates/bin/resolve-ssm-params /deployments/
+
+CMD [ "/deployments/resolve-ssm-params", "/deployments/run-java.sh" ]

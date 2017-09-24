@@ -44,4 +44,6 @@ RUN chmod 755 /deployments/run-java.sh /deployments/java-default-options /deploy
 RUN aws s3 cp s3://returnly-cfn-templates/bin/resolve-ssm-params /deployments/
 RUN chmod 755 /deployments/resolve-ssm-params
 
+RUN AWS s3 cp s3://returnly-java-repo/releases/com/returnly/tools/java-tools/latest/java-tools-latest.jar /opt/java-tools.jar
+
 CMD [ "/deployments/resolve-ssm-params", "/deployments/run-java.sh" ]

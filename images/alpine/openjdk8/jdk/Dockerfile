@@ -22,7 +22,7 @@ RUN apk --no-cache update \
             jq \
             netcat-openbsd \
             groff less python py-pip ca-certificates \
- && pip --no-cache-dir install awscli \
+ && pip --no-cache-dir install awscli boto3 \
  && apk --purge -v del py-pip \
  && rm /var/cache/apk/* \
  && echo "securerandom.source=file:/dev/urandom" >> /usr/lib/jvm/default-jvm/jre/lib/security/java.security

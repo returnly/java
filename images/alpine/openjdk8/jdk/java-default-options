@@ -39,7 +39,7 @@ generation_tuning() {
   local mx="$1"
   if [ -z "$mx" ]; then return; fi
   local max_new=`echo "$mx $new_ratio" | awk '{ printf "%d\n", $1*$2 }'`
-  echo "-XX:MaxNewSize=${max_new}m -XX:SurvivorRatio=10 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=90"
+  echo "-XX:MaxNewSize=${max_new}m -XX:SurvivorRatio=10 -XX:MinHeapFreeRatio=10 -XX:MaxHeapFreeRatio=90 -XX:ReservedCodeCacheSize=${JAVA_MAX_CODE_CACHE:-64}m"
 }
 
 
@@ -57,7 +57,7 @@ memory_opts() {
   # Check for the 'real memory size' and calculate mx from that minus a "reserved" (system/jvm) amount
   if [ "x$CONTAINER_RESERVED_MEMORY" != x ]; then
     local max_mem="${CONTAINER_RESERVED_MEMORY}"
-    local system_reserved=${JAVA_RESERVED_MEM:-160}
+    local system_reserved=${JAVA_RESERVED_MEM:-200}
     local mx=$(echo "${max_mem} ${system_reserved} 1048576" | awk '{printf "%d\n" , $1 / $3 - $2 + 0.5}')
     echo "-Xmx${mx}m"
 

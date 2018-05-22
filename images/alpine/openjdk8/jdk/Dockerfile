@@ -7,7 +7,7 @@ RUN mkdir -p /deployments
 # JAVA_APP_DIR is used by run-java.sh for finding the binaries
 ENV JAVA_APP_DIR /deployments
 ENV JAVA_HOME /usr/lib/jvm/default-jvm
-ENV JAVA_OPTIONS "-Dsun.net.inetaddr.ttl=60 -XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError"
+ENV JAVA_OPTIONS "-XX:-OmitStackTraceInFastThrow -XX:+HeapDumpOnOutOfMemoryError"
 ENV PATH $PATH:$JAVA_HOME/bin
 # turn off agent bond by default
 ENV AB_OFF true
@@ -47,5 +47,7 @@ RUN aws s3 cp s3://returnly-cfn-templates/bin/resolve-ssm-params.py /deployments
 RUN chmod 755 /deployments/resolve-ssm-params.py
 
 RUN aws s3 cp s3://returnly-java-repo/releases/com/returnly/tools/java-tools/latest/java-tools-latest.jar /opt/java-tools.jar
+
+RUN sed -i'' 's/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=20/' /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/java.security
 
 CMD [ "/deployments/resolve-ssm-params.py", "/deployments/run-java.sh" ]

@@ -48,6 +48,6 @@ RUN chmod 755 /deployments/resolve-ssm-params.py
 
 RUN aws s3 cp s3://returnly-java-repo/releases/com/returnly/tools/java-tools/latest/java-tools-latest.jar /opt/java-tools.jar
 
-RUN sed -i'' 's/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=20/' /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/java.security
+RUN sed -i'' 's/#networkaddress.cache.ttl=-1/networkaddress.cache.ttl=30/' /usr/lib/jvm/java-1.8-openjdk/jre/lib/security/java.security
 
 CMD [ "/deployments/resolve-ssm-params.py", "/deployments/run-java.sh" ]
